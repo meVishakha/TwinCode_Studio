@@ -170,10 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
     projectCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             card.style.transform = 'translateY(-10px) scale(1.02)';
+            const url = card.getAttribute('data-url');
+            if (url) {
+                // Navigate shortly after hover
+                clearTimeout(card._hoverTimer);
+                card._hoverTimer = setTimeout(() => {
+                    window.location.href = url;
+                }, 250);
+            }
         });
         
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0) scale(1)';
+            // Cancel pending hover navigation if user leaves early
+            if (card._hoverTimer) {
+                clearTimeout(card._hoverTimer);
+                card._hoverTimer = null;
+            }
         });
     });
 });
